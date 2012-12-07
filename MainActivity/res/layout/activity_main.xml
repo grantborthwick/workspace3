@@ -99,19 +99,10 @@
         android:text="Columns" />
 
     <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
-        android:layout_centerHorizontal="true"
-        android:bufferType="normal"
-        android:text="Start Alarm Mode Game" />
-
-    <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button3"
+        android:layout_below="@+id/button1"
         android:layout_centerHorizontal="true"
         android:text="Quit" />
 
@@ -169,5 +160,14 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:text="0.5714285" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button2"
+        android:layout_marginLeft="23dp"
+        android:layout_toRightOf="@+id/button1"
+        android:text="Alarm Mode" />
 
 </RelativeLayout>

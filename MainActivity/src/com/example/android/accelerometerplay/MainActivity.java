@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class MainActivity extends Activity {
 	TextView textBalls;
 	TextView textTraps;
 	TextView textBallSize;
+	CheckBox checkAlarmMode;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
 		textBalls = (TextView) findViewById(R.id.editText3);
 		textTraps = (TextView) findViewById(R.id.editText4);
 		textBallSize = (TextView) findViewById(R.id.editText5);
+		checkAlarmMode = (CheckBox) findViewById(R.id.checkBox1);
 		
 		Button button = (Button) findViewById(R.id.button1);
 		button.setOnClickListener(new OnClickListener() {	
@@ -41,16 +44,6 @@ public class MainActivity extends Activity {
 				}			
 		});
 		
-		Button buttonAlarm = (Button) findViewById(R.id.button3);
-		buttonAlarm.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0){
-				Intent levelDown = new Intent(context, AccelerometerPlayActivity.class);
-				Bundle parem = setParameters();
-				parem.putBoolean("AlarmMode", true);
-				levelDown.putExtras(parem);
-				((Activity)context).startActivityForResult(levelDown, 1);			}
-			
-		});
 		Button buttonQuit = (Button) findViewById(R.id.button2);
 		buttonQuit.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0){finish();}
@@ -89,6 +82,7 @@ public class MainActivity extends Activity {
 		textTraps.setText(((Float)TrapBoxRatio).toString());
 		textBallSize.setText(((Float)BallSize).toString());
 		
+		parem.putBoolean("AlarmMode", checkAlarmMode.isChecked());
 		parem.putInt("CellCountX", CellCountX);
 		parem.putInt("CellCountY", CellCountY);
 		parem.putInt("NUM_PARTICLES", NUM_PARTICLES);
