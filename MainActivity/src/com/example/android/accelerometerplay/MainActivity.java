@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
 		public void onClick(View arg0){
 				Intent levelDown = new Intent(context, AccelerometerPlayActivity.class);
 				Bundle parem = setParameters();
-				parem.putBoolean("AlarmMode", false);
 				levelDown.putExtras(parem);
 				((Activity)context).startActivityForResult(levelDown, 1);
 				}			
@@ -102,6 +101,13 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);g
+		if(resultCode == requestCode){Toast("You've escaped! Congratulations!");}
+		else{Toast("You quit. Lame.");}
+		
+	}
+	public void Toast(String s){
+		Toast toast = Toast.makeText(context, s, s.length());
+		toast.show();
 	}
 }

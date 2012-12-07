@@ -69,7 +69,6 @@ public class AccelerometerPlayActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// Get an instance of the SensorManager
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -86,10 +85,10 @@ public class AccelerometerPlayActivity extends Activity {
 
 		// instantiate our simulation view and set it as the activity's content
 		mSimulationView = new SimulationView(this);
-		
+		Toast("You've fallen down to level "+((Integer)mSimulationView.level).toString()+"!");
 		setContentView(mSimulationView);
 	}
-
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -100,8 +99,6 @@ public class AccelerometerPlayActivity extends Activity {
 			mSimulationView.mBalls[i].enabled = true;
 		}
 		pause = false;
-		Toast toast = Toast.makeText(context, "Risen!", "Risen!".length());
-		//toast.show();
 		/*
 		 * when the activity is resumed, we acquire a wake-lock so that the
 		 * screen stays on, since the user will likely not be fiddling with the
@@ -134,6 +131,8 @@ public class AccelerometerPlayActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode!=requestCode){
 			finish();
+		}else{
+			Toast("You've risent to level "+((Integer)mSimulationView.level).toString() + "!");
 		}
 	}
 	
@@ -304,8 +303,6 @@ public class AccelerometerPlayActivity extends Activity {
 							more|=mBalls[i].enabled;
 							}
 						if(!more){
-							Toast toast = Toast.makeText(context, "You've fallen down a hole!", "You've fallen down a hole!".length());
-							toast.show();
 							Intent levelDown = new Intent(context, AccelerometerPlayActivity.class);
 							Bundle parem = SetParameters();
 							levelDown.putExtras(parem);//Fix parem
@@ -317,8 +314,6 @@ public class AccelerometerPlayActivity extends Activity {
 				if(Boxes[mBoxX][mBoxY].isGoal){
 					if(!pause){
 						pause = true;
-						Toast toast = Toast.makeText(context, "You've escaped one level up!", "You've escaped one level up!".length());
-						toast.show();
 						Intent intent = getIntent();
 						setResult(1, intent);
 						finish();
@@ -543,7 +538,7 @@ public class AccelerometerPlayActivity extends Activity {
 			if(TrapBoxRatio==0){TrapCount = 0;}
 			else{TrapCount = (int)(CellCountX*CellCountY/TrapBoxRatio);}
 			AlarmMode = bundle.getBoolean("AlarmMode");
-			level = bundle.getInt("level");//Fix show toast with level or show on screen.
+			level = bundle.getInt("level");
 		}
 		private Bundle SetParameters() {
 			Bundle parem = new Bundle();
@@ -831,7 +826,7 @@ public class AccelerometerPlayActivity extends Activity {
 		}while(/*!ValidateMaze(CellCountX, CellCountY, TrapCount,Boxes)*/!valid);
 		int end = 0;
 	}
-	public void GenerateMaze(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes ) {
+	/*public void GenerateMaze(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes ) {
 		//Make traps!
 		do{
 			for (int i = 0; i < CellCountX; i++) {
@@ -865,10 +860,15 @@ public class AccelerometerPlayActivity extends Activity {
 			}
 		}while(!ValidateMaze(CellCountX, CellCountY, TrapCount,Boxes));
 		int end = 0;
-	}
-	public boolean ValidateMaze(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes){
+	}*/
+	/*public boolean ValidateMaze(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes){
 		boolean valid = Boxes[0][0].Validate();
 		//return valid;
 		return true;
+	}*/
+	public void Toast(String s){
+		Toast toast = Toast.makeText(context, s, s.length());
+		toast.show();
 	}
+	
 }
