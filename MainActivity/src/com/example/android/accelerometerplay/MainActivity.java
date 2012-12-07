@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
-		super.onActivityResult(requestCode, resultCode, data);g
+		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == requestCode){Toast("You've escaped! Congratulations!");}
 		else{Toast("You quit. Lame.");}
 		
