@@ -136,12 +136,8 @@ public class AccelerometerPlayActivity extends Activity {
 		}
 	}
 	
-	class SimulationView extends View implements SensorEventListener {
-		// diameter of the balls in meters
-		
+	class SimulationView extends View implements SensorEventListener {		
 		// friction of the virtual table and air
-		private static final float sFriction = 0.1f;
-
 		private Sensor mAccelerometer;
 		private long mLastT;
 		private float mLastDeltaT;
@@ -171,6 +167,7 @@ public class AccelerometerPlayActivity extends Activity {
 		private int CellCountX;
 		private int CellCountY;
 		private float BallSize;
+		private float sFriction;
 		private float sBallDiameter;
 		private float sBallDiameter2;
 		public Particle mBalls[];
@@ -218,7 +215,7 @@ public class AccelerometerPlayActivity extends Activity {
 				//Start particles out directly outside 0,0
 				mPosX = -1;
 				mPosY = 1;
-				mass = 1000.0f + ((float) Math.random()*100); // mass of our virtual object
+				mass = 1000.0f + ((float) (Math.random()-.5f)*100); // mass of our virtual object
 				enabled = true;
 			}
 
@@ -490,7 +487,7 @@ public class AccelerometerPlayActivity extends Activity {
 			mMetersToPixelsX = mXDpi / 0.0254f;
 			mMetersToPixelsY = mYDpi / 0.0254f;
 			mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-			
+			sFriction = 0.1f;
 			GetParameters();
 						
 			
