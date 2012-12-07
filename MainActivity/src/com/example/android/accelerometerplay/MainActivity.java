@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
 	TextView textBalls;
 	TextView textTraps;
 	TextView textBallSize;
+	TextView textDisplayHeight;
 	CheckBox checkAlarmMode;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class MainActivity extends Activity {
 		textBalls = (TextView) findViewById(R.id.editText3);
 		textTraps = (TextView) findViewById(R.id.editText4);
 		textBallSize = (TextView) findViewById(R.id.editText5);
+		textDisplayHeight = (TextView) findViewById(R.id.editText6);
 		checkAlarmMode = (CheckBox) findViewById(R.id.checkBox1);
 		
 		Button button = (Button) findViewById(R.id.button1);
@@ -51,7 +53,7 @@ public class MainActivity extends Activity {
 	
 	public Bundle setParameters(){
 		Bundle parem = new Bundle();
-		int CellCountX,CellCountY,NUM_PARTICLES;
+		int CellCountX,CellCountY,NUM_PARTICLES,DisplayHeight;
 		float TrapBoxRatio,BallSize;
 		try{CellCountX = Integer.parseInt(textRows.getText().toString());}
 		catch (Exception e){CellCountX = 15;}
@@ -68,23 +70,29 @@ public class MainActivity extends Activity {
 		try{BallSize = Float.parseFloat(textBallSize.getText().toString());}
 		catch(Exception e){BallSize = 1/1.75f;}
 		
+		try{DisplayHeight = Integer.parseInt(textDisplayHeight.getText().toString());}
+		catch(Exception e){DisplayHeight = 0;}
+		
 		CellCountX = Math.min(Math.max(CellCountX,2),30);
 		CellCountY = Math.min(Math.max(CellCountY,2),40);
 		NUM_PARTICLES = Math.min(Math.max(1,NUM_PARTICLES),1000);
 		if(TrapBoxRatio>0 && TrapBoxRatio < 4){TrapBoxRatio=4;}
 		if(BallSize>0.8){BallSize=.8f;}
 		if(BallSize<0.2){BallSize=0.2f;}
+		DisplayHeight = Math.max(Math.min(DisplayHeight,100), 0);
 				
 		textRows.setText(((Integer)CellCountX).toString());
 		textColumns.setText(((Integer)CellCountY).toString());
 		textBalls.setText(((Integer)NUM_PARTICLES).toString());
 		textTraps.setText(((Float)TrapBoxRatio).toString());
 		textBallSize.setText(((Float)BallSize).toString());
+		textDisplayHeight.setText(((Integer)DisplayHeight).toString());
 		
 		parem.putBoolean("AlarmMode", checkAlarmMode.isChecked());
 		parem.putInt("CellCountX", CellCountX);
 		parem.putInt("CellCountY", CellCountY);
 		parem.putInt("NUM_PARTICLES", NUM_PARTICLES);
+		parem.putInt("DisplayHeight", DisplayHeight);
 		parem.putFloat("TrapBoxRatio", TrapBoxRatio);
 		parem.putFloat("BallSize", BallSize);
 		parem.putInt("level", 1);

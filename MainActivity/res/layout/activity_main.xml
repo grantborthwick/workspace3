@@ -170,4 +170,23 @@
         android:layout_toRightOf="@+id/button1"
         android:text="Alarm Mode" />
 
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText4"
+        android:text="DisplayHeight" />
+
+    <EditText
+        android:id="@+id/editText6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView11"
+        android:ems="10"
+        android:inputType="number"
+        android:maxLength="3"
+        android:text="0" />
+
 </RelativeLayout>

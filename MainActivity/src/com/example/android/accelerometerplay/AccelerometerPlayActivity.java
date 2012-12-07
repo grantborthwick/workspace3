@@ -179,10 +179,13 @@ public class AccelerometerPlayActivity extends Activity {
 		private float boxHeight;
 		private float boxWidth;
 		private DisplayMetrics metrics;
+		private float mazeHeightPixels;
+		private float mazeWidthPixels;
 		public int NUM_PARTICLES;
-		public float displayHeight = 25f;
 		private int level;
 		private boolean AlarmMode;
+		
+		private int DisplayHeight;
 
 		/*
 		 * Each of our particle holds its previous and current position, its
@@ -200,7 +203,9 @@ public class AccelerometerPlayActivity extends Activity {
 
 			private int mBoxX;
 			private int mBoxY;
+			@SuppressWarnings("unused")
 			private int mLastBoxX;
+			@SuppressWarnings("unused")
 			private int mLastBoxY;
 			private float mass;
 			public boolean enabled;
@@ -259,8 +264,8 @@ public class AccelerometerPlayActivity extends Activity {
 			 */
 			public void resolveCollisionWithBounds() {				
 				if(!enabled){return;}
-				float w = metrics.widthPixels;
-				float h = metrics.heightPixels;
+				float w = mazeWidthPixels;
+				float h = mazeHeightPixels;
 				float BoxW = w/CellCountX;
 				float BoxH = h/CellCountY;
 				float maxXPixels,minXPixels,maxYPixels,minYPixels;
@@ -289,7 +294,9 @@ public class AccelerometerPlayActivity extends Activity {
 				if (y > ymax) {	mPosY = ymax; } 
 				else if (y < ymin) { mPosY = ymin; }
 				//Need to figure out which boxes must be passed through and then which borders need to be checked.
+				@SuppressWarnings("unused")
 				int NewXBox = getBoxXFromPixel(xc + x*xs);
+				@SuppressWarnings("unused")
 				int NewYBox = getBoxYFromPixel(yc - y*ys);
 				mLastBoxX = mBoxX;
 				mLastBoxY = mBoxY;
@@ -476,20 +483,20 @@ public class AccelerometerPlayActivity extends Activity {
 
 		public SimulationView(Context context) {
 			super(context);
-			GetParameters();
-						
-			mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
 			metrics = new DisplayMetrics();
 			getWindowManager().getDefaultDisplay().getMetrics(metrics);
 			mXDpi = metrics.xdpi;
 			mYDpi = metrics.ydpi;
 			mMetersToPixelsX = mXDpi / 0.0254f;
 			mMetersToPixelsY = mYDpi / 0.0254f;
-
+			mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+			
+			GetParameters();
+						
+			
 			// Create graphics array
-			boxHeight = ((metrics.heightPixels) / CellCountY);
-			boxWidth = (metrics.widthPixels / CellCountX);
+			boxHeight = ((mazeHeightPixels) / CellCountY);
+			boxWidth = (mazeWidthPixels / CellCountX);
 			
 			Boxes = new Box[CellCountX][CellCountY];
 
@@ -510,8 +517,7 @@ public class AccelerometerPlayActivity extends Activity {
 			opts.inDither = true;
 			opts.inPreferredConfig = Bitmap.Config.RGB_565;
 			mWood = BitmapFactory.decodeResource(getResources(),R.drawable.wood, opts);
-			mWood = Bitmap.createScaledBitmap(mWood, metrics.widthPixels,metrics.heightPixels, true);
-
+			mWood = Bitmap.createScaledBitmap(mWood, (int)mazeWidthPixels,(int)mazeHeightPixels, true);
 			line = new Paint();
 			line.setColor(Color.YELLOW);
 			line.setStrokeWidth(3);
@@ -537,8 +543,12 @@ public class AccelerometerPlayActivity extends Activity {
 			mParticleSystem = new ParticleSystem();
 			if(TrapBoxRatio==0){TrapCount = 0;}
 			else{TrapCount = (int)(CellCountX*CellCountY/TrapBoxRatio);}
+			DisplayHeight = bundle.getInt("DisplayHeight");
 			AlarmMode = bundle.getBoolean("AlarmMode");
 			level = bundle.getInt("level");
+			
+			mazeHeightPixels = metrics.heightPixels - DisplayHeight;
+			mazeWidthPixels = metrics.widthPixels;
 		}
 		private Bundle SetParameters() {
 			Bundle parem = new Bundle();
@@ -549,6 +559,7 @@ public class AccelerometerPlayActivity extends Activity {
 			parem.putFloat("TrapBoxRatio", TrapBoxRatio);
 			parem.putBoolean("AlarmMode", AlarmMode);
 			parem.putInt("level",level+1);
+			parem.putInt("DisplayHeight", DisplayHeight);
 			return parem;
 		}
 
@@ -636,16 +647,16 @@ public class AccelerometerPlayActivity extends Activity {
 				}
 			}
 			// Draw Borders
-			canvas.drawLine(0, 2, metrics.widthPixels, 2, line);
-			canvas.drawLine(2, 0, 2, metrics.heightPixels, line);
-			canvas.drawLine(0, metrics.heightPixels - 2, metrics.widthPixels,
-					metrics.heightPixels - 2, line);
-			canvas.drawLine(metrics.widthPixels - 2, 0,
-					metrics.widthPixels - 2, metrics.heightPixels, line);
+			canvas.drawLine(0, 2, mazeWidthPixels, 2, line);
+			canvas.drawLine(2, 0, 2, mazeHeightPixels, line);
+			canvas.drawLine(0, mazeHeightPixels - 2, mazeWidthPixels,
+					mazeHeightPixels - 2, line);
+			canvas.drawLine(mazeWidthPixels - 2, 0,
+					mazeWidthPixels - 2, mazeHeightPixels, line);
 
 			//Start and end text.
 			canvas.drawText("START", boxWidth/2, boxHeight/2, line);
-			canvas.drawText("END!!", metrics.widthPixels-boxWidth/2, metrics.heightPixels-boxHeight/2, line);
+			canvas.drawText("END!!", mazeWidthPixels-boxWidth/2, mazeHeightPixels-boxHeight/2, line);
 
 			/*
 			 * compute the new position of our object, based on accelerometer
@@ -661,7 +672,6 @@ public class AccelerometerPlayActivity extends Activity {
 			particleSystem.update(sx, sy, now);
 
 			final Bitmap bitmap = mBitmap;
-			final int count = particleSystem.getParticleCount();
 			for (int i = 0; i < NUM_PARTICLES; i++) {
 				/*
 				 * We transform the canvas so that the coordinate system matches
@@ -821,51 +831,8 @@ public class AccelerometerPlayActivity extends Activity {
 					Nodes.add(NextNode);
 				}
 			}
-
-
-		}while(/*!ValidateMaze(CellCountX, CellCountY, TrapCount,Boxes)*/!valid);
-		int end = 0;
+		}while(!valid);
 	}
-	/*public void GenerateMaze(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes ) {
-		//Make traps!
-		do{
-			for (int i = 0; i < CellCountX; i++) {
-				for (int j = 0; j < CellCountY; j++) {
-					Boxes[i][j]=new Box(i,j);
-				}
-			}
-			for (int i = 0; i < CellCountX; i++) {
-				for (int j = 0; j < CellCountY; j++) {
-					boolean a = Math.random()>=.5;
-					boolean b = Math.random()>=.5;
-					if(a && i+1!=CellCountX){
-						Boxes[i][j].addRightNeighbor(Boxes[i+1][j]);
-						Boxes[i+1][j].addLeftNeighbor(Boxes[i][j]);
-					}
-					if(b && j+1!=CellCountY){
-						Boxes[i][j].addDownNeighbor(Boxes[i][j+1]);
-						Boxes[i][j+1].addUpNeighbor(Boxes[i][j]);
-					}
-				}
-			}
-			Boxes[CellCountX-1][CellCountY-1].isGoal = true;
-			for(int i = 0; i < TrapCount; ++i){
-				boolean again;
-				do{
-					int x = (int)(Math.random()*CellCountX);
-					int y = (int)(Math.random()*CellCountY);
-					again = (x==0&&y==0)||(x == CellCountX-1 && y == CellCountY-1) && !Boxes[x][y].isTrap;
-					if (!again){Boxes[x][y].isTrap=true;}
-				} while(again);
-			}
-		}while(!ValidateMaze(CellCountX, CellCountY, TrapCount,Boxes));
-		int end = 0;
-	}*/
-	/*public boolean ValidateMaze(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes){
-		boolean valid = Boxes[0][0].Validate();
-		//return valid;
-		return true;
-	}*/
 	public void Toast(String s){
 		Toast toast = Toast.makeText(context, s, s.length());
 		toast.show();
