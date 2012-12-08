@@ -189,4 +189,42 @@
         android:maxLength="3"
         android:text="15" />
 
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText6"
+        android:text="Wall Width" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView12"
+        android:layout_alignBottom="@+id/textView12"
+        android:layout_alignLeft="@+id/editText5"
+        android:text="Wall Height" />
+
+    <EditText
+        android:id="@+id/editText7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView12"
+        android:ems="10"
+        android:inputType="number"
+        android:text="3" />
+
+    <EditText
+        android:id="@+id/editText8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText7"
+        android:layout_alignBottom="@+id/editText7"
+        android:layout_alignLeft="@+id/textView13"
+        android:ems="10"
+        android:inputType="number"
+        android:text="3" />
+
 </RelativeLayout>

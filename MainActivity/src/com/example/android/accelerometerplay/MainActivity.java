@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,11 +22,20 @@ public class MainActivity extends Activity {
 	TextView textTraps;
 	TextView textBallSize;
 	TextView textDisplayHeight;
+	TextView textWallWidth;
+	TextView textWallHeight;
 	CheckBox checkAlarmMode;
+	private int width;
+	private int height;
+	public int maxCellsX;
+	public int maxCellsY;
+	private DisplayMetrics metrics;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
 		textRows = (TextView) findViewById(R.id.editText2);
 		textColumns = (TextView) findViewById(R.id.editText1);
@@ -33,8 +43,9 @@ public class MainActivity extends Activity {
 		textTraps = (TextView) findViewById(R.id.editText4);
 		textBallSize = (TextView) findViewById(R.id.editText5);
 		textDisplayHeight = (TextView) findViewById(R.id.editText6);
+		textWallWidth = (TextView) findViewById(R.id.editText7);
+		textWallHeight = (TextView) findViewById(R.id.editText8);
 		checkAlarmMode = (CheckBox) findViewById(R.id.checkBox1);
-		
 		Button button = (Button) findViewById(R.id.button1);
 		button.setOnClickListener(new OnClickListener() {	
 		public void onClick(View arg0){
@@ -53,7 +64,7 @@ public class MainActivity extends Activity {
 	
 	public Bundle setParameters(){
 		Bundle parem = new Bundle();
-		int CellCountX,CellCountY,NUM_PARTICLES,DisplayHeight;
+		int CellCountX,CellCountY,NUM_PARTICLES,DisplayHeight,wallWidth, wallHeight;
 		float TrapBoxRatio,BallSize;
 		try{CellCountX = Integer.parseInt(textRows.getText().toString());}
 		catch (Exception e){CellCountX = 15;}
@@ -73,14 +84,27 @@ public class MainActivity extends Activity {
 		try{DisplayHeight = Integer.parseInt(textDisplayHeight.getText().toString());}
 		catch(Exception e){DisplayHeight = 0;}
 		
-		CellCountX = Math.min(Math.max(CellCountX,2),30);
-		CellCountY = Math.min(Math.max(CellCountY,2),40);
+		try{wallWidth = Integer.parseInt((textWallWidth.getText().toString()));}
+		catch(Exception e){wallWidth = 3;}
+		
+		try{wallHeight = Integer.parseInt((textWallHeight).getText().toString());}
+		catch(Exception e){wallHeight = 3;}
+		
+		width = metrics.widthPixels;
+		height = metrics.heightPixels;
+		maxCellsX = (int)(width/10);
+		maxCellsY = (int)(height/10);
+		
+		CellCountX = Math.min(Math.max(CellCountX,2),maxCellsX);
+		CellCountY = Math.min(Math.max(CellCountY,2),maxCellsY);
 		NUM_PARTICLES = Math.min(Math.max(1,NUM_PARTICLES),1000);
 		if(TrapBoxRatio>0 && TrapBoxRatio < 4){TrapBoxRatio=4;}
 		if(BallSize>0.8){BallSize=.8f;}
 		if(BallSize<0.2){BallSize=0.2f;}
 		if(DisplayHeight>0 && DisplayHeight<15){DisplayHeight = 15;}
 		else{DisplayHeight = Math.max(Math.min(DisplayHeight,100), 0);}
+		if(wallHeight>20 || wallHeight < 1){wallHeight = 3;}
+		if(wallWidth>20 || wallWidth < 1){wallWidth = 3;}
 				
 		textRows.setText(((Integer)CellCountX).toString());
 		textColumns.setText(((Integer)CellCountY).toString());
@@ -88,12 +112,16 @@ public class MainActivity extends Activity {
 		textTraps.setText(((Float)TrapBoxRatio).toString());
 		textBallSize.setText(((Float)BallSize).toString());
 		textDisplayHeight.setText(((Integer)DisplayHeight).toString());
+		textWallWidth.setText(((Integer)wallWidth).toString());
+		textWallHeight.setText(((Integer)wallHeight).toString());
 		
 		parem.putBoolean("AlarmMode", checkAlarmMode.isChecked());
 		parem.putInt("CellCountX", CellCountX);
 		parem.putInt("CellCountY", CellCountY);
 		parem.putInt("NUM_PARTICLES", NUM_PARTICLES);
 		parem.putInt("DisplayHeight", DisplayHeight);
+		parem.putInt("wallWidth",wallWidth);
+		parem.putInt("wallHeight",wallHeight);
 		parem.putFloat("TrapBoxRatio", TrapBoxRatio);
 		parem.putFloat("BallSize", BallSize);
 		parem.putInt("level", 1);

@@ -25,10 +25,14 @@ public final class R {
         public static final int editText4=0x7f06000e;
         public static final int editText5=0x7f060010;
         public static final int editText6=0x7f060013;
-        public static final int menu_settings=0x7f060014;
+        public static final int editText7=0x7f060016;
+        public static final int editText8=0x7f060017;
+        public static final int menu_settings=0x7f060018;
         public static final int textView1=0x7f060008;
         public static final int textView10=0x7f06000f;
         public static final int textView11=0x7f060012;
+        public static final int textView12=0x7f060014;
+        public static final int textView13=0x7f060015;
         public static final int textView2=0x7f060001;
         public static final int textView3=0x7f060002;
         public static final int textView4=0x7f060003;

@@ -147,8 +147,8 @@ public class AccelerometerPlayActivity extends Activity {
 		private float mMetersToPixelsY;
 		private Bitmap mBitmap;
 		private Bitmap mWood;
-		private Paint line;
-		private Paint line2;
+		private Paint lineUp;
+		private Paint lineAcross;
 		private Paint TrapPaint;
 		private float mXOrigin;
 		private float mYOrigin;
@@ -178,6 +178,8 @@ public class AccelerometerPlayActivity extends Activity {
 		private DisplayMetrics metrics;
 		private float mazeHeightPixels;
 		private float mazeWidthPixels;
+		private int wallWidth;
+		private int wallHeight;
 		public int NUM_PARTICLES;
 		private int level;
 		private boolean AlarmMode;
@@ -309,7 +311,7 @@ public class AccelerometerPlayActivity extends Activity {
 						if(!more){
 							Intent levelDown = new Intent(context, AccelerometerPlayActivity.class);
 							Bundle parem = SetParameters();
-							levelDown.putExtras(parem);//Fix parem
+							levelDown.putExtras(parem);
 							((Activity)context).startActivityForResult(levelDown,1);
 							pause=true;
 						}
@@ -492,14 +494,9 @@ public class AccelerometerPlayActivity extends Activity {
 						
 			
 			// Create graphics array
-			boxHeight = ((mazeHeightPixels) / CellCountY);
-			boxWidth = (mazeWidthPixels / CellCountX);
-			
 			Boxes = new Box[CellCountX][CellCountY];
 
-			//sBallDiameter = 0.006f;
-			sBallDiameter = Math.min(boxHeight/mMetersToPixelsY,boxWidth/mMetersToPixelsX)*BallSize;
-			sBallDiameter2 = sBallDiameter * sBallDiameter;
+			
 			
 			GenerateMaze2(CellCountX,CellCountY, TrapCount, Boxes);
 
@@ -515,13 +512,6 @@ public class AccelerometerPlayActivity extends Activity {
 			opts.inPreferredConfig = Bitmap.Config.RGB_565;
 			mWood = BitmapFactory.decodeResource(getResources(),R.drawable.wood, opts);
 			mWood = Bitmap.createScaledBitmap(mWood, (int)mazeWidthPixels,(int)mazeHeightPixels, true);
-			line = new Paint();
-			line.setColor(Color.YELLOW);
-			line.setStrokeWidth(3);
-
-			line2 = new Paint();
-			line2.setColor(Color.CYAN);
-			line2.setStrokeWidth(3);
 
 			TrapPaint = new Paint();
 			TrapPaint.setColor(Color.BLACK);
@@ -535,7 +525,7 @@ public class AccelerometerPlayActivity extends Activity {
 			CellCountX = Math.max(Math.max(CellCountX, 2),CellCountY/2);
 			CellCountY = Math.max(Math.max(CellCountY, 2),CellCountX/2);
 			NUM_PARTICLES = bundle.getInt("NUM_PARTICLES");
-			BallSize = bundle.getFloat("BallSize");
+			
 			TrapBoxRatio = bundle.getFloat("TrapBoxRatio");
 			mParticleSystem = new ParticleSystem();
 			if(TrapBoxRatio==0){TrapCount = 0;}
@@ -546,6 +536,22 @@ public class AccelerometerPlayActivity extends Activity {
 			
 			mazeHeightPixels = metrics.heightPixels - DisplayHeight;
 			mazeWidthPixels = metrics.widthPixels;
+			
+			wallWidth = bundle.getInt("wallWidth");
+			wallHeight = bundle.getInt("wallHeight");
+			boxHeight = ((mazeHeightPixels-wallHeight) / CellCountY)-wallHeight;
+			boxWidth = (mazeWidthPixels - wallWidth) / CellCountX - wallWidth;
+			BallSize = bundle.getFloat("BallSize");
+			sBallDiameter = Math.min(boxHeight/mMetersToPixelsY,boxWidth/mMetersToPixelsX)*BallSize;
+			sBallDiameter2 = sBallDiameter * sBallDiameter;
+			
+			lineUp = new Paint();
+			lineUp.setColor(Color.YELLOW);
+			lineUp.setStrokeWidth(wallWidth);
+
+			lineAcross = new Paint();
+			lineAcross.setColor(Color.YELLOW);
+			lineAcross.setStrokeWidth(wallHeight);
 		}
 		private Bundle SetParameters() {
 			Bundle parem = new Bundle();
@@ -557,6 +563,8 @@ public class AccelerometerPlayActivity extends Activity {
 			parem.putBoolean("AlarmMode", AlarmMode);
 			parem.putInt("level",level+1);
 			parem.putInt("DisplayHeight", DisplayHeight);
+			parem.putInt("wallHeight",wallHeight);
+			parem.putInt("wallWidth",wallWidth);
 			return parem;
 		}
 
@@ -627,33 +635,29 @@ public class AccelerometerPlayActivity extends Activity {
 					if (!Boxes[i][j].hasDown)
 					{
 						canvas.drawLine(
-								boxWidth*i,boxHeight*(j+1),
-								boxWidth*(i+1),boxHeight*(j+1),line
+								(boxWidth+wallWidth)*i,								(boxHeight+wallHeight)*(j+1)+wallHeight/2,
+								(boxWidth+wallWidth)*(i+1)+wallWidth-1,				(boxHeight+wallHeight)*(j+1)+wallHeight/2,lineAcross
 								);
 					}
 					if (!Boxes[i][j].hasRight){
 						canvas.drawLine(
-								boxWidth*(i+1),boxHeight*j,
-								boxWidth*(i+1),boxHeight*(j+1),line
+								(boxWidth+wallWidth)*(i+1)+wallWidth/2,				(boxHeight+wallHeight)*j,
+								(boxWidth+wallWidth)*(i+1)+wallWidth/2,				(boxHeight+wallHeight)*(j+1)+wallHeight-1,lineUp
 								);
 					}
 					//Traps!
 					if(Boxes[i][j].isTrap){
-						canvas.drawCircle((i+.5f)*boxWidth, (j+.5f)*boxHeight, Math.min(boxWidth/2, boxHeight/2)-2, TrapPaint);
+						canvas.drawCircle(i*(wallWidth+boxWidth)+boxWidth/2, j*(wallHeight+boxHeight)+boxHeight/2, Math.min(boxWidth/2,boxHeight/2), TrapPaint);
 					}
 				}
 			}
 			// Draw Borders
-			canvas.drawLine(0, 2, mazeWidthPixels, 2, line);
-			canvas.drawLine(2, 0, 2, mazeHeightPixels, line);
-			canvas.drawLine(0, mazeHeightPixels - 2, mazeWidthPixels,
-					mazeHeightPixels - 2, line);
-			canvas.drawLine(mazeWidthPixels - 2, 0,
-					mazeWidthPixels - 2, mazeHeightPixels, line);
+			canvas.drawLine(0, wallHeight/2, mazeWidthPixels, wallHeight/2, lineAcross);
+			canvas.drawLine(wallWidth/2, 0, wallWidth/2, mazeHeightPixels, lineUp);
 
 			//Start and end text.
-			canvas.drawText("START", boxWidth/2, boxHeight/2, line);
-			canvas.drawText("END!!", mazeWidthPixels-boxWidth/2, mazeHeightPixels-boxHeight/2, line);
+			canvas.drawText("START", boxWidth/2, boxHeight/2, lineUp);
+			canvas.drawText("END!!", mazeWidthPixels-boxWidth/2, mazeHeightPixels-boxHeight/2, lineUp);
 
 			/*
 			 * compute the new position of our object, based on accelerometer
@@ -688,17 +692,76 @@ public class AccelerometerPlayActivity extends Activity {
 					+ ((Integer)((Float)y).intValue()).toString() + ") ("
 					+ ((Integer) particleSystem.getBoxX(i)).toString()+ ","
 					+ ((Integer) particleSystem.getBoxY(i)).toString()+ ")",
-					0, mazeHeightPixels+13, line);
+					0, mazeHeightPixels+13, lineUp);
 
 			}
 
 			// and make sure to redraw asap
 			invalidate();
 		}
+		
+		public void GenerateMaze2(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes ) {
+			boolean valid;
+			do{
+				valid = false;
+				for (int i = 0; i < CellCountX; i++) {
+					for (int j = 0; j < CellCountY; j++) {
+						Boxes[i][j]=new Box(i,j);
+					}
+				}
+				Boxes[CellCountX-1][CellCountY-1].isGoal = true;
+				for(int i = 0; i < TrapCount; ++i){
+					boolean again;
+					do{
+						int x = (int)(Math.random()*CellCountX);
+						int y = (int)(Math.random()*CellCountY);
+						again = (x==0&&y==0)||
+								(x == CellCountX-1 && y == CellCountY-1) && !Boxes[x][y].isTrap ||
+								(x>0 && Boxes[x-1][y].isTrap) ||
+								(x<CellCountX-1 && Boxes[x+1][y].isTrap) ||
+								(y>0 && Boxes[x][y-1].isTrap) ||
+								(y<CellCountY-1 && Boxes[x][y+1].isTrap);
+						if (!again){
+							Boxes[x][y].isTrap=true;
+							if(x>0){
+								Boxes[x][y].addNeighbor(Boxes[x-1][y]);
+								Boxes[x-1][y].addNeighbor(Boxes[x][y]);
+							}if(x<CellCountX-1){
+								Boxes[x][y].addNeighbor(Boxes[x+1][y]);
+								Boxes[x+1][y].addNeighbor(Boxes[x][y]);
+							}if(y>0){
+								Boxes[x][y].addNeighbor(Boxes[x][y-1]);
+								Boxes[x][y-1].addNeighbor(Boxes[x][y]);
+							}if(y<CellCountY-1){
+								Boxes[x][y].addNeighbor(Boxes[x][y+1]);
+								Boxes[x][y+1].addNeighbor(Boxes[x][y]);
+							}
+						}
+					} while(again);
+				}
+				List<Box> Nodes = new ArrayList<Box>();
+				Nodes.add(Boxes[0][0]);
+				Boxes[0][0].visited = true;
+				while (!Nodes.isEmpty()){
+					int i = (int)(Math.random()*Nodes.size());
+					Box Node = Nodes.get(i);
+					Box NextNode = Node.getRandomUnvisitedNeighbor(Boxes,CellCountX,CellCountY);
+					if(NextNode.x==-1){
+						Nodes.remove(i);
+					}else{
+						NextNode.visited = true;
+						valid |= NextNode.isGoal;
+						Node.addNeighbor(NextNode);
+						NextNode.addNeighbor(Node);
+						Nodes.add(NextNode);
+					}
+				}
+			}while(!valid);
+		}
+
 
 		@Override
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		}
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 	}
 
 	public class Box{
@@ -770,71 +833,8 @@ public class AccelerometerPlayActivity extends Activity {
 			return Neighbors[(int)(Math.random()*count)];
 		}
 	}
-
-
-
-	public void GenerateMaze2(int CellCountX, int CellCountY, int TrapCount, Box[][] Boxes ) {
-		//Make traps!
-		boolean valid;
-		do{
-			valid = false;
-			for (int i = 0; i < CellCountX; i++) {
-				for (int j = 0; j < CellCountY; j++) {
-					Boxes[i][j]=new Box(i,j);
-				}
-			}
-			Boxes[CellCountX-1][CellCountY-1].isGoal = true;
-			for(int i = 0; i < TrapCount; ++i){
-				boolean again;
-				do{
-					int x = (int)(Math.random()*CellCountX);
-					int y = (int)(Math.random()*CellCountY);
-					again = (x==0&&y==0)||
-							(x == CellCountX-1 && y == CellCountY-1) && !Boxes[x][y].isTrap ||
-							(x>0 && Boxes[x-1][y].isTrap) ||
-							(x<CellCountX-1 && Boxes[x+1][y].isTrap) ||
-							(y>0 && Boxes[x][y-1].isTrap) ||
-							(y<CellCountY-1 && Boxes[x][y+1].isTrap);
-					if (!again){
-						Boxes[x][y].isTrap=true;
-						if(x>0){
-							Boxes[x][y].addNeighbor(Boxes[x-1][y]);
-							Boxes[x-1][y].addNeighbor(Boxes[x][y]);
-						}if(x<CellCountX-1){
-							Boxes[x][y].addNeighbor(Boxes[x+1][y]);
-							Boxes[x+1][y].addNeighbor(Boxes[x][y]);
-						}if(y>0){
-							Boxes[x][y].addNeighbor(Boxes[x][y-1]);
-							Boxes[x][y-1].addNeighbor(Boxes[x][y]);
-						}if(y<CellCountY-1){
-							Boxes[x][y].addNeighbor(Boxes[x][y+1]);
-							Boxes[x][y+1].addNeighbor(Boxes[x][y]);
-						}
-					}
-				} while(again);
-			}
-			List<Box> Nodes = new ArrayList<Box>();
-			Nodes.add(Boxes[0][0]);
-			Boxes[0][0].visited = true;
-			while (!Nodes.isEmpty()){
-				int i = (int)(Math.random()*Nodes.size());
-				Box Node = Nodes.get(i);
-				Box NextNode = Node.getRandomUnvisitedNeighbor(Boxes,CellCountX,CellCountY);
-				if(NextNode.x==-1){
-					Nodes.remove(i);
-				}else{
-					NextNode.visited = true;
-					valid |= NextNode.isGoal;
-					Node.addNeighbor(NextNode);
-					NextNode.addNeighbor(Node);
-					Nodes.add(NextNode);
-				}
-			}
-		}while(!valid);
-	}
 	public void Toast(String s){
 		Toast toast = Toast.makeText(context, s, s.length());
 		toast.show();
 	}
-	
 }
