@@ -79,7 +79,8 @@ public class MainActivity extends Activity {
 		if(TrapBoxRatio>0 && TrapBoxRatio < 4){TrapBoxRatio=4;}
 		if(BallSize>0.8){BallSize=.8f;}
 		if(BallSize<0.2){BallSize=0.2f;}
-		DisplayHeight = Math.max(Math.min(DisplayHeight,100), 0);
+		if(DisplayHeight>0 && DisplayHeight<15){DisplayHeight = 15;}
+		else{DisplayHeight = Math.max(Math.min(DisplayHeight,100), 0);}
 				
 		textRows.setText(((Integer)CellCountX).toString());
 		textColumns.setText(((Integer)CellCountY).toString());

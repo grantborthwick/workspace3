@@ -187,6 +187,6 @@
         android:ems="10"
         android:inputType="number"
         android:maxLength="3"
-        android:text="0" />
+        android:text="15" />
 
 </RelativeLayout>

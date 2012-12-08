@@ -215,7 +215,7 @@ public class AccelerometerPlayActivity extends Activity {
 				//Start particles out directly outside 0,0
 				mPosX = -1;
 				mPosY = 1;
-				mass = 1000.0f + ((float) (Math.random()-.5f)*100); // mass of our virtual object
+				mass = 1000.0f ;//+ ((float) (Math.random()-.5f)*100); // mass of our virtual object
 				enabled = true;
 			}
 
@@ -675,18 +675,20 @@ public class AccelerometerPlayActivity extends Activity {
 				 * the sensors coordinate system with the origin in the center
 				 * of the screen and the unit is the meter.
 				 */
+				float x = 0;
+				float y = 0;
 				if(mBalls[i].enabled){
-					final float x = xc + particleSystem.getPosX(i) * xs;
-					final float y = yc - particleSystem.getPosY(i) * ys;
+					x = xc + particleSystem.getPosX(i) * xs;
+					y = yc - particleSystem.getPosY(i) * ys;
 					canvas.drawBitmap(bitmap, x, y, null);
 				}
 
-				/*canvas.drawText("("
+				canvas.drawText("("
 					+ ((Integer)((Float)x).intValue()).toString()+ ","
 					+ ((Integer)((Float)y).intValue()).toString() + ") ("
 					+ ((Integer) particleSystem.getBoxX(i)).toString()+ ","
 					+ ((Integer) particleSystem.getBoxY(i)).toString()+ ")",
-					x, y, line);*/
+					0, mazeHeightPixels+13, line);
 
 			}
 
