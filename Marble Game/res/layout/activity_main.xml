@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context="com.example.android.accelerometerplay.MainActivity" >
 
     <Button
         android:id="@+id/button1"
@@ -11,7 +11,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="24dp"
-        android:text="Start Game" />
+        android:text="@string/start_game" />
 
     <TextView
         android:id="@+id/textView2"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Grant Borthwick"
+        android:text="@string/grant_borthwick"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView2"
-        android:text="Ben Kuestersteffen"
+        android:text="@string/ben_kuestersteffen"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="CIS 520 - Dr. Neilson"
+        android:text="@string/cis_520_dr_neilson"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView4"
-        android:text="Project 3"
+        android:text="@string/project_3"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView5"
-        android:text="Fall 2012"
+        android:text="@string/fall_2012"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
@@ -67,7 +67,7 @@
         android:layout_marginTop="96dp"
         android:ems="10"
         android:inputType="number"
-        android:text="15" >
+        android:text="@string/_15" >
 
         <requestFocus />
     </EditText>
@@ -80,7 +80,7 @@
         android:layout_toRightOf="@+id/editText1"
         android:ems="10"
         android:inputType="number"
-        android:text="10" />
+        android:text="@string/_10" />
 
     <TextView
         android:id="@+id/textView1"
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editText2"
         android:layout_alignParentLeft="true"
-        android:text="Rows" />
+        android:text="@string/rows" />
 
     <TextView
         android:id="@+id/textView7"
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editText2"
         android:layout_alignLeft="@+id/editText2"
-        android:text="Columns" />
+        android:text="@string/columns" />
 
     <Button
         android:id="@+id/button2"
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/button1"
         android:layout_centerHorizontal="true"
-        android:text="Quit" />
+        android:text="@string/quit" />
 
     <TextView
         android:id="@+id/textView8"
@@ -112,7 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/editText1"
-        android:text="Balls" />
+        android:text="@string/balls" />
 
     <EditText
         android:id="@+id/editText3"
@@ -123,7 +123,7 @@
         android:ems="10"
         android:inputType="number"
         android:maxLength="4"
-        android:text="1" />
+        android:text="@string/_1" />
 
     <TextView
         android:id="@+id/textView9"
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/editText3"
-        android:text="Ratio of Boxes to Traps" />
+        android:text="@string/ratio_of_boxes_to_traps" />
 
     <EditText
         android:id="@+id/editText4"
@@ -141,7 +141,7 @@
         android:layout_below="@+id/textView9"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:text="7.0" />
+        android:text="@string/_7_0" />
 
     <TextView
         android:id="@+id/textView10"
@@ -149,7 +149,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editText3"
         android:layout_alignLeft="@+id/editText2"
-        android:text="Ball Size" />
+        android:text="@string/ball_size" />
 
     <EditText
         android:id="@+id/editText5"
@@ -159,7 +159,7 @@
         android:layout_below="@+id/textView10"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:text="0.5714285" />
+        android:text="@string/_0_5714285" />
 
     <CheckBox
         android:id="@+id/checkBox1"
@@ -168,7 +168,7 @@
         android:layout_above="@+id/button2"
         android:layout_marginLeft="23dp"
         android:layout_toRightOf="@+id/button1"
-        android:text="Alarm Mode" />
+        android:text="@string/alarm_mode" />
 
     <TextView
         android:id="@+id/textView11"
@@ -176,7 +176,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/editText4"
-        android:text="DisplayHeight" />
+        android:text="@string/displayheight" />
 
     <EditText
         android:id="@+id/editText6"
@@ -187,7 +187,7 @@
         android:ems="10"
         android:inputType="number"
         android:maxLength="3"
-        android:text="15" />
+        android:text="@string/_15" />
 
     <TextView
         android:id="@+id/textView12"
@@ -195,7 +195,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/editText6"
-        android:text="Wall Width" />
+        android:text="@string/wall_width" />
 
     <TextView
         android:id="@+id/textView13"
@@ -204,7 +204,7 @@
         android:layout_alignBaseline="@+id/textView12"
         android:layout_alignBottom="@+id/textView12"
         android:layout_alignLeft="@+id/editText5"
-        android:text="Wall Height" />
+        android:text="@string/wall_height" />
 
     <EditText
         android:id="@+id/editText7"
@@ -214,7 +214,7 @@
         android:layout_below="@+id/textView12"
         android:ems="10"
         android:inputType="number"
-        android:text="3" />
+        android:text="@string/_1" />
 
     <EditText
         android:id="@+id/editText8"
@@ -225,6 +225,15 @@
         android:layout_alignLeft="@+id/textView13"
         android:ems="10"
         android:inputType="number"
-        android:text="3" />
+        android:text="@string/_1" />
+
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText8"
+        android:layout_toRightOf="@+id/button1"
+        android:checked="true"
+        android:text="@string/automatic" />
 
 </RelativeLayout>

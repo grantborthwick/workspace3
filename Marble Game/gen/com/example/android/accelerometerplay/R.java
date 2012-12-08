@@ -19,6 +19,7 @@ public final class R {
         public static final int button1=0x7f060000;
         public static final int button2=0x7f06000a;
         public static final int checkBox1=0x7f060011;
+        public static final int checkBox2=0x7f060018;
         public static final int editText1=0x7f060006;
         public static final int editText2=0x7f060007;
         public static final int editText3=0x7f06000c;
@@ -27,7 +28,7 @@ public final class R {
         public static final int editText6=0x7f060013;
         public static final int editText7=0x7f060016;
         public static final int editText8=0x7f060017;
-        public static final int menu_settings=0x7f060018;
+        public static final int menu_settings=0x7f060019;
         public static final int textView1=0x7f060008;
         public static final int textView10=0x7f06000f;
         public static final int textView11=0x7f060012;
@@ -49,9 +50,31 @@ public final class R {
         public static final int activity_main=0x7f050000;
     }
     public static final class string {
+        public static final int _0_5714285=0x7f040014;
+        public static final int _1=0x7f040011;
+        public static final int _10=0x7f04000c;
+        public static final int _15=0x7f04000b;
+        public static final int _7_0=0x7f040016;
+        public static final int alarm_mode=0x7f040013;
         public static final int app_name=0x7f040000;
+        public static final int automatic=0x7f04000a;
+        public static final int ball_size=0x7f040015;
+        public static final int balls=0x7f040010;
+        public static final int ben_kuestersteffen=0x7f040006;
+        public static final int cis_520_dr_neilson=0x7f040007;
+        public static final int columns=0x7f04000e;
+        public static final int displayheight=0x7f040017;
+        public static final int fall_2012=0x7f040009;
+        public static final int grant_borthwick=0x7f040005;
         public static final int hello_world=0x7f040001;
         public static final int menu_settings=0x7f040002;
+        public static final int project_3=0x7f040008;
+        public static final int quit=0x7f04000f;
+        public static final int ratio_of_boxes_to_traps=0x7f040012;
+        public static final int rows=0x7f04000d;
+        public static final int start_game=0x7f040004;
         public static final int title_activity_main=0x7f040003;
+        public static final int wall_height=0x7f040019;
+        public static final int wall_width=0x7f040018;
     }
 }

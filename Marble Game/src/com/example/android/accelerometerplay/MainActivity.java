@@ -25,10 +25,13 @@ public class MainActivity extends Activity {
 	TextView textWallWidth;
 	TextView textWallHeight;
 	CheckBox checkAlarmMode;
+	CheckBox checkAutomaticBorders;
 	private int width;
 	private int height;
 	public int maxCellsX;
 	public int maxCellsY;
+	public int minCellsX;
+	public int minCellsY;
 	private DisplayMetrics metrics;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class MainActivity extends Activity {
 		textWallWidth = (TextView) findViewById(R.id.editText7);
 		textWallHeight = (TextView) findViewById(R.id.editText8);
 		checkAlarmMode = (CheckBox) findViewById(R.id.checkBox1);
+		checkAutomaticBorders = (CheckBox) findViewById(R.id.checkBox2);
 		Button button = (Button) findViewById(R.id.button1);
 		button.setOnClickListener(new OnClickListener() {	
 		public void onClick(View arg0){
@@ -92,19 +96,23 @@ public class MainActivity extends Activity {
 		
 		width = metrics.widthPixels;
 		height = metrics.heightPixels;
-		maxCellsX = (int)(width/10);
-		maxCellsY = (int)(height/10);
+		maxCellsX = (int)(width/12);
+		maxCellsY = (int)(height/12);
+		minCellsX = 4;
+		minCellsY = 6;
 		
-		CellCountX = Math.min(Math.max(CellCountX,2),maxCellsX);
-		CellCountY = Math.min(Math.max(CellCountY,2),maxCellsY);
+		CellCountX = Math.min(Math.max(CellCountX,minCellsX),maxCellsX);
+		CellCountY = Math.min(Math.max(CellCountY,minCellsY),maxCellsY);
+		CellCountX = Math.max(Math.max(CellCountX, 4),(int)(CellCountY/1.5f));
+		CellCountY = Math.max(Math.max(CellCountY, 6),(int)(CellCountX));
 		NUM_PARTICLES = Math.min(Math.max(1,NUM_PARTICLES),1000);
 		if(TrapBoxRatio>0 && TrapBoxRatio < 4){TrapBoxRatio=4;}
 		if(BallSize>0.8){BallSize=.8f;}
 		if(BallSize<0.2){BallSize=0.2f;}
 		if(DisplayHeight>0 && DisplayHeight<15){DisplayHeight = 15;}
 		else{DisplayHeight = Math.max(Math.min(DisplayHeight,100), 0);}
-		if(wallHeight>20 || wallHeight < 1){wallHeight = 3;}
-		if(wallWidth>20 || wallWidth < 1){wallWidth = 3;}
+		if(wallHeight>20 || wallHeight < 1){wallHeight = 1;}
+		if(wallWidth>20 || wallWidth < 1){wallWidth = 1;}
 				
 		textRows.setText(((Integer)CellCountX).toString());
 		textColumns.setText(((Integer)CellCountY).toString());
@@ -116,6 +124,7 @@ public class MainActivity extends Activity {
 		textWallHeight.setText(((Integer)wallHeight).toString());
 		
 		parem.putBoolean("AlarmMode", checkAlarmMode.isChecked());
+		parem.putBoolean("AutomaticBorders", checkAutomaticBorders.isChecked());
 		parem.putInt("CellCountX", CellCountX);
 		parem.putInt("CellCountY", CellCountY);
 		parem.putInt("NUM_PARTICLES", NUM_PARTICLES);

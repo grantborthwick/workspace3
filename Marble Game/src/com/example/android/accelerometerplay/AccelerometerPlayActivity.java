@@ -183,6 +183,7 @@ public class AccelerometerPlayActivity extends Activity {
 		public int NUM_PARTICLES;
 		private int level;
 		private boolean AlarmMode;
+		private boolean AutomaticBorders;
 		
 		private int DisplayHeight;
 
@@ -522,8 +523,8 @@ public class AccelerometerPlayActivity extends Activity {
 			Bundle bundle = intent.getExtras();
 			CellCountX = bundle.getInt("CellCountX");
 			CellCountY = bundle.getInt("CellCountY");
-			CellCountX = Math.max(Math.max(CellCountX, 2),CellCountY/2);
-			CellCountY = Math.max(Math.max(CellCountY, 2),CellCountX/2);
+			CellCountX = Math.max(Math.max(CellCountX, 4),CellCountY/2);
+			CellCountY = Math.max(Math.max(CellCountY, 6),CellCountX/2);
 			NUM_PARTICLES = bundle.getInt("NUM_PARTICLES");
 			
 			TrapBoxRatio = bundle.getFloat("TrapBoxRatio");
@@ -537,8 +538,14 @@ public class AccelerometerPlayActivity extends Activity {
 			mazeHeightPixels = metrics.heightPixels - DisplayHeight;
 			mazeWidthPixels = metrics.widthPixels;
 			
-			wallWidth = bundle.getInt("wallWidth");
-			wallHeight = bundle.getInt("wallHeight");
+			AutomaticBorders = bundle.getBoolean("AutomaticBorders");
+			if(AutomaticBorders){
+				wallWidth = (int)(mazeWidthPixels/(10*CellCountX));
+				wallHeight = (int)(mazeHeightPixels/(10*CellCountY));
+			}else{
+				wallWidth = bundle.getInt("wallWidth");
+				wallHeight = bundle.getInt("wallHeight");
+			}
 			boxHeight = ((mazeHeightPixels-wallHeight) / CellCountY)-wallHeight;
 			boxWidth = (mazeWidthPixels - wallWidth) / CellCountX - wallWidth;
 			BallSize = bundle.getFloat("BallSize");
@@ -561,6 +568,7 @@ public class AccelerometerPlayActivity extends Activity {
 			parem.putFloat("BallSize", BallSize);
 			parem.putFloat("TrapBoxRatio", TrapBoxRatio);
 			parem.putBoolean("AlarmMode", AlarmMode);
+			parem.putBoolean("AutomaticBorders", AutomaticBorders);
 			parem.putInt("level",level+1);
 			parem.putInt("DisplayHeight", DisplayHeight);
 			parem.putInt("wallHeight",wallHeight);
@@ -635,19 +643,19 @@ public class AccelerometerPlayActivity extends Activity {
 					if (!Boxes[i][j].hasDown)
 					{
 						canvas.drawLine(
-								(boxWidth+wallWidth)*i,								(boxHeight+wallHeight)*(j+1)+wallHeight/2,
-								(boxWidth+wallWidth)*(i+1)+wallWidth-1,				(boxHeight+wallHeight)*(j+1)+wallHeight/2,lineAcross
+							(boxWidth+wallWidth)*i,								(boxHeight+wallHeight)*(j+1)+wallHeight/2,
+							(boxWidth+wallWidth)*(i+1)+wallWidth-1f,			(boxHeight+wallHeight)*(j+1)+wallHeight/2,lineAcross
 								);
 					}
 					if (!Boxes[i][j].hasRight){
 						canvas.drawLine(
-								(boxWidth+wallWidth)*(i+1)+wallWidth/2,				(boxHeight+wallHeight)*j,
-								(boxWidth+wallWidth)*(i+1)+wallWidth/2,				(boxHeight+wallHeight)*(j+1)+wallHeight-1,lineUp
-								);
+							(boxWidth+wallWidth)*(i+1)+wallWidth/2,				(boxHeight+wallHeight)*j,
+							(boxWidth+wallWidth)*(i+1)+wallWidth/2,				(boxHeight+wallHeight)*(j+1)+wallHeight-1f,lineUp
+							);
 					}
 					//Traps!
 					if(Boxes[i][j].isTrap){
-						canvas.drawCircle(i*(wallWidth+boxWidth)+boxWidth/2, j*(wallHeight+boxHeight)+boxHeight/2, Math.min(boxWidth/2,boxHeight/2), TrapPaint);
+						canvas.drawCircle(i*(wallWidth+boxWidth)+wallWidth + boxWidth/2, j*(wallHeight+boxHeight)+wallHeight+boxHeight/2, Math.min(boxWidth/2,boxHeight/2), TrapPaint);
 					}
 				}
 			}
@@ -772,6 +780,7 @@ public class AccelerometerPlayActivity extends Activity {
 		public boolean hasUp;
 		public boolean hasDown;
 		public boolean isTrap;
+		public float TrapRadius;
 		public Box Left;
 		public Box Right;
 		public Box Up;
